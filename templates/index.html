@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Diseases Detection</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #2e7d32;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-buttons button {
+            flex: 1;
+            padding: 15px;
+            margin: 0;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+        }
+        .tab-buttons button.active {
+            background-color: #388e3c;
+            color: white;
+        }
+        .tab-buttons button:hover {
+            background-color: #388e3c;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 8px;
+            font-size: 1rem;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #388e3c;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .results img, .results video {
+            display: block;
+            margin: 20px auto;
+            max-width: 90%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        footer {
+            background-color: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: #FFEE58;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        // JavaScript for tab switching
+        function showTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Skin Diseases Detection System</h1>
+    </header>
+    <nav>
+        <a href="https://pyresearch.org/">Home</a>
+        <a href="https://pyresearch.org/about-us/">About</a>
+        <a href="https://pyresearch.org/contact-us/">Contact</a>
+    </nav>
+    <div class="container">
+        <div class="tab-buttons">
+            <button class="active" data-tab="image-tab" onclick="showTab('image-tab')">Image Upload</button>
+            <button data-tab="video-tab" onclick="showTab('video-tab')">Video Upload</button>
+        </div>
+        <div id="image-tab" class="tab-content active">
+            <h2>Upload Images</h2>
+            <form action="/" method="POST" enctype="multipart/form-data">
+                <input type="file" name="files" accept="image/png, image/jpeg" multiple>
+                <button type="submit">Upload and Process Images</button>
+            </form>
+        </div>
+        <div id="video-tab" class="tab-content">
+            <h2>Upload Videos</h2>
+            <form action="/" method="POST" enctype="multipart/form-data">
+                <input type="file" name="files" accept="video/mp4, video/avi, video/mov" multiple>
+                <button type="submit">Upload and Process Videos</button>
+            </form>
+        </div>
+
+        {% if processed_files %}
+        <div class="results">
+            <h2>Processed Results</h2>
+            {% for file_url in processed_files %}
+                {% if file_url.endswith('.mp4') or file_url.endswith('.avi') or file_url.endswith('.mov') %}
+                    <video controls>
+                        <source src="{{ file_url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% else %}
+                    <img src="{{ file_url }}" alt="Processed Image">
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <footer>
+        <p>
+            We at <strong>PyResearch</strong> value open communication. You can connect with us through the following channels:
+        </p>
+        <p>
+            Phone: +966 539723031 | 
+            <a href="https://www.youtube.com/channel/UCyB_7yHs7y8u9rONDSXgkCg/join" target="_blank">Channel Membership</a> | 
+            <a href="https://www.facebook.com/Pyresearch" target="_blank">Facebook</a> | 
+            <a href="https://www.youtube.com/c/Pyresearch" target="_blank">YouTube</a> | 
+            <a href="https://medium.com/@Pyresearch" target="_blank">Medium</a> | 
+            <a href="https://www.instagram.com/pyresearch/" target="_blank">Instagram</a> | 
+            <a href="https://www.linkedin.com/company/Pyresearch" target="_blank">LinkedIn</a> | 
+            <a href="https://twitter.com/Noorkhokhar10" target="_blank">Twitter</a> | 
+            <a href="https://discord.com/invite/BHxGBn98" target="_blank">Discord</a> | 
+            <a href="https://github.com/Pyresearch" target="_blank">GitHub</a>
+        </p>
+    </footer>
+</body>
+</html>
